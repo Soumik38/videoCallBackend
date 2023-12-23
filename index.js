@@ -18,7 +18,9 @@ const emailToSocket=new Map()
 const socketToEmail=new Map()
 
 io.on('connection', (socket) => {
+
     console.log(`${socket.id} is connected`)
+    
 	socket.emit('me', socket.id);
 
     socket.on('join_room',(data)=>{
