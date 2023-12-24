@@ -1,4 +1,4 @@
-const {Server}=require('socket.io')
+// const {Server}=require('socket.io')
 const express = require('express')
 const app = express()
 const cors=require('cors')
@@ -8,7 +8,7 @@ const server=require('http').createServer(app)
 require('./db/connection')
 const Users=require('./models/Users')
 
-const io=new Server(5000,{  //socket io server
+const io=require('socket.io')(server,{  //socket io server
     cors:true
 })
 
@@ -50,7 +50,9 @@ io.on('connection', (socket) => {
     })
 })
 
-app.get('/',cors(),(req,res)=>{})
+app.get('/',cors(),(req,res)=>{
+    res.send('Backend')
+})
 
 app.post('/signup',async (req,res)=>{
     // console.log(res)
