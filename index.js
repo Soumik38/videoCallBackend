@@ -1,4 +1,3 @@
-// const {Server}=require('socket.io')
 const express = require('express')
 const app = express()
 const cors=require('cors')
@@ -54,7 +53,7 @@ app.get('/',cors(),(req,res)=>{
     res.send('Backend')
 })
 
-app.post('/signup',async (req,res)=>{
+app.post('/signup',cors(),async (req,res)=>{
     // console.log(res)
     const{name,email,pass}=req.body
     try{
@@ -76,7 +75,7 @@ app.post('/signup',async (req,res)=>{
     }
 })
 
-app.post('/signin',async (req,res)=>{
+app.post('/signin',cors(),async (req,res)=>{
     const{email,pass}=req.body
     try{
         const check=await Users.findOne({email:email})
@@ -93,6 +92,22 @@ app.post('/signin',async (req,res)=>{
         res.json('notexists')
     }
 })
+
+app.get('/user/:email',cors(), async (req, res) => {
+    try {
+      const email = req.params.email
+      const user = await Users.findOne({ email })
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' })
+      }
+  
+      res.json({ name: user.name })
+    } catch (error) {
+      console.error('Error fetching user by email:', error)
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  })
 
 const port = process.env.PORT || 4000
 server.listen(port, () => {
